@@ -1,0 +1,74 @@
+// All invitation text lives here. Edit freely.
+// `map` is the link opened when a venue is tapped; leave it null for no link.
+
+const maps = (q) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`
+
+export const intro = {
+  video: '/intro.mp4',
+  poster: '/intro-start.jpg', // shown while the video loads
+  endFrame: '/intro-end.jpg', // shown instead of the video if autoplay is blocked
+  // Large screens (tablets, laptops, desktops) skip the intro and show this
+  // wide background instead. Keep in sync with the media query in App.css.
+  wideFrame: '/bg-wide.jpg',
+  wideQuery: '(min-width: 768px) and (min-height: 520px)',
+  // Timings in seconds, matched to the intro video.
+  namesFrom: 3.0, // doors open, temple in view
+  namesUntil: 7.0, // camera starts pushing into the arch
+  contentAt: 8.3, // cream arch has settled
+}
+
+// Shown on its own inside the arch after the intro, before the invitation.
+export const opening = {
+  lines: [
+    ['Two families, bound by blessings,', 'begin a new story.'],
+    ['And every ritual ahead is a chapter', "we'd love for you to be part of."],
+  ],
+  holdMs: 4200, // how long it stays fully visible
+}
+
+export const groom = {
+  name: 'Sudeepth Reddy',
+  parents: ['Son of Smt. Adulla Saritha', 'Sri. Adulla Srinivas Reddy'],
+}
+export const bride = {
+  name: 'Sukritha Balaji',
+  parents: ['Daughter of Smt. Kavitha Balaji', 'Sri. V.S. Balaji'],
+}
+
+export const blessing =
+  'With the blessings of our families, we invite you to celebrate the beginning of forever'
+
+// Cards shown in each event's swipeable row.
+//   { video, poster }  an invitation video (plays muted; guests can unmute)
+//   { image }          a still image, cropped to fill the card
+//   download           file saved by the download button (defaults to the media)
+//   {}                 an empty black card, until the artwork is ready
+
+export const events = [
+  {
+    title: ['Wedding'],
+    day: '01',
+    month: 'Nov',
+    year: '2026',
+    time: '10:08 AM',
+    cards: [{ video: '/media/wedding.mp4', poster: '/media/wedding-poster.jpg' }],
+    venues: [
+      { name: 'Ananda Convention', map: maps('Ananda Convention Himayath Sagar Hyderabad') },
+    ],
+  },
+  {
+    title: ['Reception'],
+    day: '03',
+    month: 'Nov',
+    year: '2026',
+    time: '07:00 PM',
+    cards: [{ video: '/media/reception.mp4', poster: '/media/reception-poster.jpg' }],
+    venues: [{ name: 'Savaaya Convention', map: maps('Savaaya Convention Gandipet Hyderabad') }],
+  },
+]
+
+export const gratitude = {
+  title: 'With Gratitude',
+  text: "Our story brought us here, but it's your presence that will make every celebration complete. See you soon.",
+}

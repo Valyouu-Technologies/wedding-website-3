@@ -1,0 +1,663 @@
+:root {
+  /* The intro video's final-frame cream as browsers decode it. */
+  --cream: #faddb7;
+  --ink: #231b13;
+  --brown: #5b4a32;
+  --gold: #a8742f;
+  /* 1% of the content column; everything scales with it. Normally the phone's
+     width, but on shorter phones (e.g. 16:9) the arch opening is narrower than
+     the screen, so cap it by height to keep the content inside the arch. */
+  --u: min(min(100vw, 430px) / 100, 0.5svh);
+
+  --script: 'Italianno', cursive;
+  --display: 'Italiana', 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', system-ui, sans-serif;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* One fixed phone-sized screen; on desktop it sits centred like a phone.
+   The page itself never scrolls; only the invitation does (see .invitation),
+   so the arch behind it stays put. */
+.page {
+  position: relative;
+  max-width: 430px;
+  height: 100svh;
+  margin: 0 auto;
+  overflow: hidden;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  text-align: center;
+}
+
+/* The video, and later its frozen last frame, is the permanent background. */
+.bg-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.bg-media[hidden] {
+  display: none;
+}
+
+.script {
+  font-family: var(--script);
+  font-size: calc(var(--u) * 15.5);
+  line-height: 1.05;
+  color: var(--brown);
+}
+
+.weds {
+  font-family: var(--script);
+  font-size: calc(var(--u) * 8.4);
+  line-height: 1.1;
+  color: var(--brown);
+}
+
+.caps {
+  font-family: var(--sans);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ---------- Names over the temple shot ---------- */
+
+.names-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 calc(var(--u) * 6) 12svh;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+  pointer-events: none;
+}
+
+.names-overlay.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.names-overlay .script {
+  color: #33261b;
+  font-size: calc(var(--u) * 13.5);
+}
+
+.names-overlay .weds {
+  color: #33261b;
+  font-size: calc(var(--u) * 7);
+}
+
+/* ---------- Invitation ---------- */
+
+.invitation {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Clip the content to the arch opening (traced from the video's last frame
+     and sized/positioned exactly like the video's object-fit: cover), so it
+     stays fully visible inside the arch and stops at the carved edges. */
+  -webkit-mask: url('/arch-mask.svg') center / cover no-repeat;
+  mask: url('/arch-mask.svg') center / cover no-repeat;
+}
+
+.invitation::-webkit-scrollbar {
+  display: none;
+}
+
+/* ---------- Hero ---------- */
+
+.hero,
+.events {
+  width: calc(var(--u) * 100);
+  margin-inline: auto;
+}
+
+.hero {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10svh calc(var(--u) * 10) calc(6svh + env(safe-area-inset-bottom));
+}
+
+.emblem {
+  display: block;
+  width: calc(var(--u) * 36);
+  height: auto;
+}
+
+.together {
+  margin-top: 5svh;
+  font-size: calc(var(--u) * 4);
+  line-height: 1.35;
+}
+
+.blessing {
+  margin-top: 8svh;
+  font-weight: 300;
+  font-size: calc(var(--u) * 4.1);
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.person.first {
+  margin-top: 8svh;
+}
+
+.person {
+  margin-top: 3svh;
+}
+
+.parents {
+  font-size: calc(var(--u) * 3.3);
+  line-height: 1.3;
+  margin-bottom: 0.6svh;
+}
+
+.hero .weds {
+  margin-top: 1svh;
+}
+
+.scroll-cue-wrap {
+  margin-top: auto;
+}
+
+/* Fades out once the guest starts scrolling, back in at the very top. */
+.scroll-cue {
+  padding: 4svh 0 0;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--display);
+  font-size: calc(var(--u) * 5.6);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+}
+
+.scroll-cue svg {
+  display: block;
+  width: calc(var(--u) * 5);
+  margin: 0 auto 1svh;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  animation: nudge 2.2s ease-in-out infinite;
+}
+
+.scroll-cue.is-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+@keyframes nudge {
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ---------- Events ---------- */
+
+.event {
+  padding-top: calc(var(--u) * 56);
+}
+
+.event:first-child {
+  padding-top: calc(var(--u) * 30);
+}
+
+.event-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 3.5);
+  margin-bottom: calc(var(--u) * 3);
+  font-family: var(--display);
+  font-size: calc(var(--u) * 7.4);
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+}
+
+.star {
+  font-size: 0.45em;
+  color: var(--brown);
+}
+
+.amp {
+  margin: 0 0.25em;
+  font-family: var(--serif);
+  font-style: italic;
+}
+
+.datetime {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 2.4);
+  color: #3d3022;
+}
+
+.day {
+  font-weight: 400;
+  font-size: calc(var(--u) * 10.5);
+  line-height: 1;
+  color: var(--brown);
+}
+
+.month-year,
+.time {
+  font-size: calc(var(--u) * 3.7);
+  line-height: 1.15;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.month-year {
+  margin-left: calc(var(--u) * -1.2);
+}
+
+.rule {
+  align-self: stretch;
+  width: 1.5px;
+  margin: 0 calc(var(--u) * 2);
+  background: var(--gold);
+}
+
+/* Swipeable row of invitation cards; the next card peeks in on the right. */
+.cards {
+  display: flex;
+  gap: calc(var(--u) * 3);
+  margin-top: calc(var(--u) * 7);
+  padding: 0 calc(var(--u) * 15);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 calc(var(--u) * 15);
+  scrollbar-width: none;
+}
+
+.cards::-webkit-scrollbar {
+  display: none;
+}
+
+.cards.single {
+  justify-content: center;
+}
+
+.card {
+  position: relative;
+  flex: none;
+  width: calc(var(--u) * 66);
+  aspect-ratio: 9 / 16;
+  overflow: hidden;
+  border-radius: calc(var(--u) * 2.4);
+  background: #e9dcc6;
+  scroll-snap-align: start;
+}
+
+.card.empty {
+  background: #000;
+}
+
+.card video,
+.card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-btn {
+  position: absolute;
+  bottom: calc(var(--u) * 2.6);
+  display: grid;
+  place-items: center;
+  width: calc(var(--u) * 7.5);
+  height: calc(var(--u) * 7.5);
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--u) * 1.6);
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.18);
+  cursor: pointer;
+}
+
+.card-btn svg {
+  width: 62%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card-btn.download {
+  right: calc(var(--u) * 2.6);
+}
+
+.card-btn.sound {
+  left: calc(var(--u) * 2.6);
+}
+
+.venue-label {
+  margin-top: calc(var(--u) * 6);
+  font-size: calc(var(--u) * 3.4);
+  color: #3d3022;
+}
+
+.venues {
+  display: flex;
+  justify-content: center;
+  gap: calc(var(--u) * 6);
+  margin-top: calc(var(--u) * 2.5);
+  padding: 0 calc(var(--u) * 8);
+}
+
+.venue {
+  font-family: var(--display);
+  font-size: calc(var(--u) * 5.4);
+  line-height: 1.25;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1.5px dotted var(--ink);
+}
+
+/* ---------- Gratitude ----------
+   Fills the final screen, centred in the arch, so scrolling ends on it. */
+
+.gratitude {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6svh calc(var(--u) * 14) calc(10svh + env(safe-area-inset-bottom));
+}
+
+/* Interlaced SS monogram (Monogram.jsx). */
+.monogram {
+  display: block;
+  height: calc(var(--u) * 30);
+  width: auto;
+  aspect-ratio: 795 / 1156;
+  color: var(--brown);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 1.5);
+  margin: calc(var(--u) * 4) 0 calc(var(--u) * 4);
+  color: var(--brown);
+  font-size: calc(var(--u) * 2.6);
+}
+
+.divider i {
+  width: calc(var(--u) * 22);
+  height: 1px;
+  background: var(--gold);
+}
+
+.gratitude h2 {
+  font-family: var(--display);
+  font-size: calc(var(--u) * 6.2);
+  margin-bottom: calc(var(--u) * 3);
+}
+
+.gratitude p {
+  font-weight: 400;
+  font-size: calc(var(--u) * 4);
+  line-height: 1.25;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- Opening lines (after the intro, before the invitation) ---------- */
+
+.opening {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 5);
+  padding: 4svh calc(var(--u) * 9) 0;
+  font-family: var(--display);
+  font-size: calc(var(--u) * 4.4);
+  line-height: 1.35;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.opening p {
+  opacity: 0;
+  animation: unblur 1.4s ease forwards;
+  animation-delay: calc(0.3s + var(--i) * 0.9s);
+}
+
+.opening.is-leaving {
+  opacity: 0;
+  filter: blur(6px);
+  transition: opacity 0.9s ease, filter 0.9s ease;
+}
+
+@keyframes unblur {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+/* ---------- Motion ---------- */
+
+.enter {
+  opacity: 0;
+  animation: rise 1s ease forwards;
+  animation-delay: calc(var(--i, 0) * 140ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+}
+
+/* Scroll reveals. Each .reveal section gets .is-visible when it scrolls into
+   view; its pieces then animate in, staggered by --d. */
+.reveal {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --step: 130ms;
+}
+
+/* Text slides up from behind an invisible line. */
+.rise {
+  display: inline-block;
+  overflow: hidden;
+  padding: 0.08em 0.04em 0.14em;
+  vertical-align: bottom;
+}
+
+.rise-inner {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 1.1s var(--ease) calc(var(--d) * var(--step));
+}
+
+.is-visible .rise-inner {
+  transform: none;
+}
+
+/* Fades up out of a soft blur. */
+.fade-up {
+  opacity: 0;
+  filter: blur(6px);
+  transform: translateY(18px);
+  transition:
+    opacity 1s ease calc(var(--d) * var(--step)),
+    filter 1s ease calc(var(--d) * var(--step)),
+    transform 1.1s var(--ease) calc(var(--d) * var(--step));
+}
+
+.is-visible .fade-up {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+/* Title stars turn in; the date's gold rule draws downwards. */
+.reveal .star {
+  display: inline-block;
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+  transition:
+    opacity 0.8s ease 0.25s,
+    transform 1.2s var(--ease) 0.25s;
+}
+
+.reveal.is-visible .star {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal .rule {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1s var(--ease) calc(2 * var(--step));
+}
+
+.reveal.is-visible .rule {
+  transform: none;
+}
+
+/* Cards unveil upwards, the picture settling from a slight zoom. */
+.reveal .card {
+  clip-path: inset(100% 0 0 0 round calc(var(--u) * 2.4));
+  transition: clip-path 1.3s var(--ease) calc(2.5 * var(--step));
+}
+
+.reveal.is-visible .card {
+  clip-path: inset(0 0 0 0 round calc(var(--u) * 2.4));
+}
+
+.reveal .card video,
+.reveal .card img {
+  transform: scale(1.18);
+  transition: transform 1.8s var(--ease) calc(2.5 * var(--step));
+}
+
+.reveal.is-visible .card video,
+.reveal.is-visible .card img {
+  transform: none;
+}
+
+/* Gratitude: the monogram comes into focus, then the divider draws out. */
+.reveal .monogram {
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(0.92);
+  transition:
+    opacity 1.4s ease,
+    filter 1.4s ease,
+    transform 1.6s var(--ease);
+}
+
+.reveal.is-visible .monogram {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.reveal .divider i {
+  transform: scaleX(0);
+  transition: transform 1.1s var(--ease) calc(2 * var(--step));
+}
+
+.reveal.is-visible .divider i {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter,
+  .names-overlay,
+  .scroll-cue svg,
+  .opening p,
+  .rise-inner,
+  .fade-up,
+  .reveal .star,
+  .reveal .rule,
+  .reveal .card,
+  .reveal .card video,
+  .reveal .card img,
+  .reveal .monogram,
+  .reveal .divider i {
+    animation: none;
+    transition: none;
+    opacity: 1;
+    filter: none;
+    transform: none;
+    clip-path: none;
+  }
+
+  .names-overlay:not(.is-visible) {
+    opacity: 0;
+  }
+}
+
+/* ---------- Large screens ----------
+   Tablets, laptops and desktops (keep in sync with intro.wideQuery in
+   data.js): no intro video; the wide temple-corridor background fills the
+   screen and the invitation scrolls inside its central arch. */
+
+@media (min-width: 768px) and (min-height: 520px) {
+  :root {
+    /* Size the column to the arch opening, which is 24.2% of the background's
+       rendered width (cover: the larger of the screen width or 1530/847 x its
+       height), but never larger than the phone layout's proportions allow for
+       this screen height, so the first screen still fits. */
+    --u: min(max(100vw, 180.6svh) * 0.242 / 75, 0.462svh);
+  }
+
+  .page {
+    max-width: none;
+  }
+
+  video.bg-media {
+    display: none;
+  }
+
+  .invitation {
+    -webkit-mask: url('/arch-mask-wide.svg') center / cover no-repeat;
+    mask: url('/arch-mask-wide.svg') center / cover no-repeat;
+  }
+}
