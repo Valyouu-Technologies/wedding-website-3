@@ -1,6 +1,6 @@
 # Sudeepth & Sukritha — Wedding Invitation
 
-Variant of the main invitation (`wedding_website`) without the Haldi & Mehandi and Sangeeth sections. Not deployed yet.
+Variant of the main invitation (`wedding_website`) without the Haldi & Mehendi and Sangeeth sections. Not deployed yet.
 
 A single-page invitation built with React + Vite.
 
